@@ -16,7 +16,9 @@ stagnation = datetime.date(2021, 10, 5)
 
 def convertUnits(df):
     df["Flow"] = df["Flow"] / 3600  # liters/h to litres/s
+    df["FlowS"] = df["FlowS"] / 3600
     df["Irr"] = df["Irr"] * 1000 / pyranometer_constant  # mV to W/m2
+    df["IrrS"] = df["IrrS"] * 1000 / pyranometer_constant
     return df
 
 def calc_dt_i(df, Tin="Tin"):
@@ -60,6 +62,10 @@ stagnation_converted = convertUnits(stagnation_raw)
 calc_dt_i(clear_sky_converted)
 calc_dt_i(stagnation_converted, Tin="Tafmu")
 
+clear_sky_converted["Tout_Tin"] = clear_sky_converted["Tout"] - clear_sky_converted["Tin"]
+clear_sky_converted["ToutS_TinS"] = clear_sky_converted["ToutS"] - clear_sky_converted["TinS"]
+clear_sky_converted.describe().to_csv("describe.csv")
+
 clear_sky_selected = clear_sky_converted.loc[f"{clear_sky} 10:30:00": 
                                              f"{clear_sky} 12:30:00"]
 stagnation_selected = stagnation_converted.loc[f"{stagnation} 10:00:00":
@@ -72,4 +78,4 @@ linregress = stats.linregress(all_days["dt_i"], all_days["eff"])
 
 plot_efficiency_dt_i(all_days, linregress)
 
-save_regresults(linregress)
+# save_regresults(linregress)

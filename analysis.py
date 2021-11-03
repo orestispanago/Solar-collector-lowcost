@@ -6,6 +6,19 @@ import pandas as pd
 from scipy import stats
 import json
 
+params = {'figure.figsize': (9, 6),
+          'axes.titlesize': 18,
+          'axes.titleweight': 'bold',
+          'axes.labelsize': 24,
+          'axes.labelweight': 'bold',
+          'xtick.labelsize': 18,
+          'ytick.labelsize': 18,
+          'font.weight' : 'bold',
+          'font.size': 18,
+          'savefig.dpi': 300.0,
+          'savefig.format': 'png',
+          'figure.constrained_layout.use': True}
+plt.rcParams.update(params)
 
 cp = 4200  # J/(kg*K)
 pyranometer_constant = 10.5  # uV/(W/m2)
@@ -50,6 +63,7 @@ def plot_efficiency_dt_i(df, linregress):
     ax.set_ylabel('$n$')
     ax.set_xlabel('$\\frac{Tin - Tamb}{I}$')
     ax.set_ylim(-0.05, 1)
+    plt.savefig("eff_dt_i")
     plt.show()
 
 clear_sky_raw = datareader.selectDay(clear_sky)
